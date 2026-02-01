@@ -116,3 +116,22 @@ class Comment(Base):
     # Relationships
     task = relationship("Task", back_populates="comments")
     user = relationship("User", back_populates="comments")
+
+
+# ------------------------------------------------------------------
+# Activity Log Model (Basic Activity Tracking)
+# ------------------------------------------------------------------
+
+class ActivityLog(Base):
+    __tablename__ = "activity_logs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    action = Column(String(100), nullable=False)  # e.g., "Created task", "Updated task status"
+    entity_type = Column(String(50), nullable=False)  # e.g., "Task", "Team"
+    entity_id = Column(Integer, nullable=False)  # ID of the task/team/etc.
+
+    timestamp = Column(DateTime, default=datetime.utcnow)
+
+    # Relationships
+    user = relationship("User")

@@ -133,12 +133,13 @@ def get_tasks(
 def update_task_status(
     task_id: int,
     status_update: schemas.TaskStatusUpdate,
+    user_id: int,
     db: Session = Depends(get_db)
 ):
     """
     Update task status.
     """
-    task = crud.update_task_status(db, task_id, status_update)
+    task = crud.update_task_status(db, task_id, status_update, user_id)
 
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
@@ -169,6 +170,24 @@ def get_task_comments(task_id: int, db: Session = Depends(get_db)):
     Get all comments for a task.
     """
     return crud.get_comments_by_task(db, task_id)
+
+
+# ---------------------------------------------------------
+# ACTIVITY LOG ROUTES
+# ---------------------------------------------------------
+
+@app.get("/activity", response_model=List[schemas.ActivityLogResponse])
+def get_activity_logs(
+    user_id: int = None,
+    entity_type: str = None,
+    entity_id: int = None,
+    limit: int = 50,
+    db: Session = Depends(get_db)
+):
+    """
+    Get activity logs with optional filters.
+    """
+    return crud.get_activity_logs(db, user_id, entity_type, entity_id, limit)
 
 
 # ---------------------------------------------------------

@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import and_
 from datetime import datetime
 
-from models import User, Team, TeamMember, Task, Comment
+from models import User, Team, TeamMember, Task, Comment, ActivityLog
 from schemas import (
     UserCreate,
     TeamCreate,
@@ -115,6 +115,10 @@ def create_task(db: Session, task: TaskCreate, created_by: int):
     db.add(db_task)
     db.commit()
     db.refresh(db_task)
+
+    # Log activity
+    log_activity(db, created_by, "Created task", "Task", db_task.id)
+
     return db_task
 
 
@@ -144,7 +148,7 @@ def get_tasks(
     return query.all()
 
 
-def update_task_status(db: Session, task_id: int, status_update: TaskStatusUpdate):
+def update_task_status(db: Session, task_id: int, status_update: TaskStatusUpdate, user_id: int):
     """
     Update task status (To Do / In Progress / Completed).
     """
@@ -158,6 +162,10 @@ def update_task_status(db: Session, task_id: int, status_update: TaskStatusUpdat
 
     db.commit()
     db.refresh(task)
+
+    # Log activity
+    log_activity(db, user_id, f"Updated task status to {status_update.status}", "Task", task_id)
+
     return task
 
 
@@ -185,3 +193,35 @@ def get_comments_by_task(db: Session, task_id: int):
     Get all comments for a task.
     """
     return db.query(Comment).filter(Comment.task_id == task_id).all()
+
+
+# ------------------------------------------------------------------
+# ACTIVITY LOG CRUD OPERATIONS
+# ------------------------------------------------------------------
+
+def log_activity(db: Session, user_id: int, action: str, entity_type: str, entity_id: int):
+    """
+    Log an activity (e.g., task creation, update).
+    """
+    log_entry = ActivityLog(
+        user_id=user_id,
+        action=action,
+        entity_type=entity_type,
+        entity_id=entity_id
+    )
+    db.add(log_entry)
+    db.commit()
+
+
+def get_activity_logs(db: Session, user_id: int = None, entity_type: str = None, entity_id: int = None, limit: int = 50):
+    """
+    Get activity logs with optional filters.
+    """
+    query = db.query(ActivityLog)
+    if user_id:
+        query = query.filter(ActivityLog.user_id == user_id)
+    if entity_type:
+        query = query.filter(ActivityLog.entity_type == entity_type)
+    if entity_id:
+        query = query.filter(ActivityLog.entity_id == entity_id)
+    return query.order_by(ActivityLog.timestamp.desc()).limit(limit).all()
