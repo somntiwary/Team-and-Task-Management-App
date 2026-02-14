@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard — Saralta</title>
+    <link rel="stylesheet" href="css/style.css?v=5">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body class="app-body">
+    <header class="topbar">
+        <div class="topbar-left">
+            <div class="app-logo">
+                <img src="assets/logo.png" alt="Saralta" class="logo-img">
+                <span>Saralta</span>
+            </div>
+        </div>
+        <div class="topbar-right">
+            <div class="user-info">
+                <div class="user-avatar" id="user-avatar"></div>
+                <div class="user-meta">
+                    <span class="user-name" id="user-badge">User</span>
+                    <span class="user-role">ID: <span id="topbar-user-id">—</span> · <span
+                            id="user-role">Member</span></span>
+                </div>
+            </div>
+            <button type="button" class="btn btn-ghost btn-chat" onclick="toggleChatPanel()">Chat</button>
+            <button type="button" class="btn btn-ghost btn-logout" onclick="logout()">Log out</button>
+        </div>
+    </header>
+
+    <div class="dashboard-layout">
+        <aside class="sidebar" aria-label="Teams navigation">
+            <div class="sidebar-inner">
+                <div class="sidebar-title">Teams</div>
+                <nav class="sidebar-nav">
+                    <button type="button" class="sidebar-item sidebar-item--active" id="team-nav-all"
+                        onclick="selectTeamForView(null)">
+                        <span class="sidebar-dot" aria-hidden="true"></span>
+                        <span class="sidebar-label">All teams</span>
+                    </button>
+                    <div id="team-nav-list" class="sidebar-list" role="list"></div>
+                </nav>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <!-- Welcome strip -->
+            <section class="dashboard-hero">
+                <div class="hero-greeting">
+                    <h1 class="hero-title">Hi, <span id="hero-username">there</span></h1>
+                    <p class="hero-desc">Here’s your workspace overview. <strong>Your user ID: <span
+                                id="hero-user-id">—</span></strong> , <strong>Your username: <span
+                                id="hero-username-desc"></span></strong> — use this when assigning tasks to yourself or
+                        when others add you to a team.</p>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-pill">
+                        <span class="stat-value" id="stat-teams">0</span>
+                        <span class="stat-label">Teams</span>
+                    </div>
+                    <div class="stat-pill">
+                        <span class="stat-value" id="stat-tasks">0</span>
+                        <span class="stat-label">Tasks</span>
+                    </div>
+                    <div class="stat-pill">
+                        <span class="stat-value" id="stat-due-today">0</span>
+                        <span class="stat-label">Due today</span>
+                    </div>
+                    <div class="stat-pill">
+                        <span class="stat-value" id="stat-due-week">0</span>
+                        <span class="stat-label">Due this week</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Teams -->
+            <section class="content-section" id="teams">
+                <div class="section-head">
+                    <span class="section-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                        </svg>
+                    </span>
+                    <h2 class="section-title">Teams</h2>
+                </div>
+                <div class="cards-row">
+                    <div class="card card--create" id="team-section">
+                        <div class="card-icon-wrap">
+                            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19" />
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                            </svg>
+                        </div>
+                        <h3 class="card-title">Create team</h3>
+                        <div class="form-group">
+                            <input type="text" id="team-name" placeholder="e.g. Engineering" class="input">
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="createTeam()">Create team</button>
+                    </div>
+                    <div class="card card--action" id="activity-section">
+                        <div class="card-icon-wrap">
+                            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M3 13h4l3 7 4-14 3 7h4" />
+                            </svg>
+                        </div>
+                        <h3 class="card-title">Create activity</h3>
+                        <div class="form-group">
+                            <label for="activity-team">Team</label>
+                            <select id="activity-team">
+                                <option value="">Select team</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="activity-name">Activity name</label>
+                            <input type="text" id="activity-name" placeholder="e.g. Division A or Project X"
+                                class="input">
+                        </div>
+                        <div class="form-group">
+                            <label for="activity-type">Type</label>
+                            <select id="activity-type">
+                                <option value="Division">Division</option>
+                                <option value="Project">Project</option>
+                            </select>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="createActivity()">Create
+                            activity</button>
+                    </div>
+                    <div class="card card--list">
+                        <div class="card-icon-wrap">
+                            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                <circle cx="9" cy="7" r="4" />
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                            </svg>
+                        </div>
+                        <h3 class="card-title">My teams</h3>
+                        <div id="teams-list" class="teams-list"></div>
+                    </div>
+                    <div class="card card--action" id="member-section">
+                        <div class="card-icon-wrap">
+                            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                <circle cx="8.5" cy="7" r="4" />
+                                <line x1="20" y1="8" x2="20" y2="14" />
+                                <line x1="23" y1="11" x2="17" y2="11" />
+                            </svg>
+                        </div>
+                        <h3 class="card-title">Add member to team</h3>
+                        <div class="form-group">
+                            <label for="add-member-team">Team</label>
+                            <select id="add-member-team">
+                                <option value="">Select team</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="add-member-user">User</label>
+                            <select id="add-member-user">
+                                <option value="">Select user</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="add-member-role">Role</label>
+                            <select id="add-member-role">
+                                <option value="Member">Member</option>
+                                <option value="Team Lead">Team Lead</option>
+                                <option value="Group Head">Group Head</option>
+                                <option value="Project Director">Project Director</option>
+
+                                <option value="Admin">Admin</option>
+                            </select>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="addMemberToTeam()">Add member</button>
+                    </div>
+                    <!-- Admin-only management cards -->
+                    <div class="card card--action" id="delete-team-card">
+                        <div class="card-icon-wrap">
+                            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M3 6h18" />
+                                <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                <path d="M6 6l1 14a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-14" />
+                            </svg>
+                        </div>
+                        <h3 class="card-title">Delete team</h3>
+                        <p class="card-help-text">Global admin only. Teams with members, activities, or tasks cannot be
+                            deleted.</p>
+                        <div class="form-group">
+                            <label for="delete-team-select">Team</label>
+                            <select id="delete-team-select">
+                                <option value="">Select team</option>
+                            </select>
+                        </div>
+                        <button type="button" class="btn btn-danger" onclick="confirmDeleteTeam()">Delete team</button>
+                    </div>
+
+                    <div class="card card--action" id="remove-member-card">
+                        <div class="card-icon-wrap">
+                            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                <circle cx="8.5" cy="7" r="4" />
+                                <line x1="20" y1="8" x2="20" y2="14" />
+                                <line x1="23" y1="11" x2="17" y2="11" />
+                            </svg>
+                        </div>
+                        <h3 class="card-title">Remove member</h3>
+                        <div class="form-group">
+                            <label for="remove-member-team">Team</label>
+                            <select id="remove-member-team">
+                                <option value="">Select team</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="remove-member-user">Team member</label>
+                            <select id="remove-member-user">
+                                <option value="">Select member</option>
+                            </select>
+                        </div>
+                        <button type="button" class="btn btn-danger" onclick="confirmRemoveMember()">Remove
+                            member</button>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- User Management (Admin / Division Head) -->
+            <section class="content-section" id="users-section" style="display:none;">
+                <div class="section-head">
+                    <span class="section-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                        </svg>
+                    </span>
+                    <h2 class="section-title">Manage Users</h2>
+                </div>
+                <div class="card card--users-mgmt">
+                    <div class="users-mgmt-toolbar">
+                        <div class="users-mgmt-search">
+                            <label for="users-search" class="sr-only">Search by username</label>
+                            <input type="text" id="users-search" class="input" placeholder="Search by username…" aria-label="Search users">
+                        </div>
+                        <div class="users-mgmt-filter">
+                            <label for="users-role-filter">Filter by role</label>
+                            <select id="users-role-filter" class="input">
+                                <option value="">All roles</option>
+                                <option value="member">Member</option>
+                                <option value="division head">Division Head</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="data-table" id="users-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Username</th>
+                                    <th>Global Role</th>
+                                    <th>Change role</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-table-body">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="users-mgmt-hint">Filter by &quot;Member&quot; to find users to promote to Division Head. Use the quick buttons to set role.</p>
+                </div>
+            </section>
+
+            <!-- Create task -->
+            <section class="content-section" id="create-task">
+                <div class="section-head">
+                    <span class="section-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 11l3 3L22 4" />
+                            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                        </svg>
+                    </span>
+                    <h2 class="section-title">Create task</h2>
+                </div>
+                <div class="card card-wide card--form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="task-team">Team</label>
+                            <select id="task-team" required>
+                                <option value="">Select team</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="task-activity">Activity (Division / Project)</label>
+                            <select id="task-activity">
+                                <option value="">Select team first</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="task-title">Title</label>
+                            <input type="text" id="task-title" placeholder="Task title" class="input">
+                        </div>
+                        <div class="form-group form-group-full">
+                            <label for="task-desc">Description</label>
+                            <textarea id="task-desc" placeholder="Add a description (optional)" rows="2"
+                                class="input"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="task-type">Task type</label>
+                            <select id="task-type" class="input">
+                                <option value="Normal" selected>Normal</option>
+                                <option value="Technical">Technical</option>
+                                <option value="Procurement">Procurement</option>
+                            </select>
+                            <p class="form-hint form-hint--type" id="task-type-hint" style="display:none;">Technical and Procurement require approval from Admin, Division Head, Team Lead, or Project Director.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="task-priority">Priority</label>
+                            <select id="task-priority">
+                                <option value="Low">Low</option>
+                                <option value="Medium" selected>Medium</option>
+                                <option value="High">High</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="task-due">Due date</label>
+                            <input type="date" id="task-due" class="input">
+                        </div>
+                        <div class="form-group" id="task-single-assign-wrap" style="display:none;">
+                            <label for="task-assignee">Assign to</label>
+                            <select id="task-assignee">
+                                <option value="">Optional — select team first</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="task-lead-wrap" style="display:none;">
+                            <label for="task-lead">Lead Person (Optional)</label>
+                            <select id="task-lead">
+                                <option value="">Select team first</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="task-share-wrap" style="display:none;">
+                            <label for="task-share">% Share (Optional)</label>
+                            <input type="number" id="task-share" placeholder="0-100" min="0" max="100" class="input">
+                        </div>
+                        <div class="form-group form-group-full" id="task-multi-assign-wrap" style="display:none;">
+                            <label>Assign to one or more people (optional)</label>
+                            <div id="task-assignees-list" class="task-assignees-list"></div>
+                            <button type="button" class="btn btn-ghost btn-sm" id="task-add-assignee">+ Add assignee</button>
+                            <p class="form-hint">Optionally set % share per person and mark one as lead.</p>
+                        </div>
+                        <div class="form-group" id="task-closure-group" hidden>
+                            <label for="task-closure">Closure Control (Optional)</label>
+                            <select id="task-closure">
+                                <option value="">Default (Admin/Div Head)</option>
+                            </select>
+                            <small class="form-text">Assign approval right to a specific Group Head/Project
+                                Director.</small>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="createTask()">Create task</button>
+                </div>
+            </section>
+
+            <!-- Tasks list -->
+            <section class="content-section" id="tasks">
+                <div class="section-header-row">
+                    <div class="section-head">
+                        <span class="section-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                <polyline points="14 2 14 8 20 8" />
+                                <line x1="16" y1="13" x2="8" y2="13" />
+                                <line x1="16" y1="17" x2="8" y2="17" />
+                                <polyline points="10 9 9 9 8 9" />
+                            </svg>
+                        </span>
+                        <h2 class="section-title">Tasks</h2>
+                    </div>
+                    <div class="filter-bar">
+                        <select id="filter-status" onchange="loadTasks()">
+                            <option value="">All statuses</option>
+                            <option value="To Do">To Do</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Pending Completion">Pending</option>
+                        </select>
+                        <select id="filter-assigned" onchange="loadTasks()">
+                            <option value="">Assigned to</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="card card-full card--table">
+                    <div class="table-wrap">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th class="col-task">Task</th>
+                                    <th>Assigned</th>
+                                    <th class="col-type">Type</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                    <th class="col-due">Due</th>
+                                    <th class="col-days-left">Days left</th>
+                                    <th class="col-ext">Extension</th>
+                                    <th class="col-actions">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="task-table"></tbody>
+                        </table>
+                    </div>
+                    <div id="tasks-empty" class="empty-state" hidden>
+                        <div class="empty-state-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                <polyline points="14 2 14 8 20 8" />
+                                <line x1="16" y1="13" x2="8" y2="13" />
+                                <line x1="16" y1="17" x2="8" y2="17" />
+                            </svg>
+                        </div>
+                        <p class="empty-state-title">No tasks yet</p>
+                        <p class="empty-state-desc">Create a task above to get started.</p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Activity chat panel (toggle like VS Code) -->
+        <aside class="chat-panel" id="chat-panel" hidden aria-label="Activity discussion panel">
+            <div class="chat-header">
+                <div class="chat-title">
+                    <span>Activity chat</span>
+                    <span class="chat-subtitle" id="chat-subtitle">Select an activity</span>
+                </div>
+                <button type="button" class="chat-close" onclick="toggleChatPanel(false)"
+                    aria-label="Close chat">&times;</button>
+            </div>
+            <div class="chat-body" id="chat-messages">
+                <div class="chat-empty">Select a specific activity to view its discussion.</div>
+            </div>
+            <div class="chat-compose">
+                <textarea id="chat-input" class="input" rows="2" placeholder="Write a message…"
+                    onkeydown="onChatKeyDown(event)"></textarea>
+                <button type="button" class="btn btn-primary" onclick="sendChatMessage()">Send</button>
+            </div>
+        </aside>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+    <!-- Completion proof modal -->
+    <div id="completion-proof-modal" class="modal" hidden role="dialog" aria-labelledby="completion-proof-modal-title"
+        aria-modal="true">
+        <div class="modal-backdrop" onclick="closeCompletionProofModal()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="completion-proof-modal-title" class="modal-title">Attach Task Completion Proof (PDF / Word /
+                    Screenshot)</h2>
+                <button type="button" class="modal-close" onclick="closeCompletionProofModal()"
+                    aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="completion-proof-desc">Upload your completion proof. Accepted formats: PDF, Word (.doc,
+                    .docx), or image (.png, .jpg, .jpeg, .gif). Max 10 MB.</p>
+                <div id="completion-proof-form" class="completion-proof-form">
+                    <input type="hidden" id="completion-proof-task-id" value="">
+                    <div class="form-group">
+                        <label for="completion-proof-file">Choose file</label>
+                        <input type="file" id="completion-proof-file" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg,.gif"
+                            class="input">
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-ghost"
+                            onclick="closeCompletionProofModal()">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="completion-proof-submit">Submit for
+                            approval</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js?v=6"></script>
+    <script src="js/dashboard.js?v=7"></script>
+</body>
+
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in — Saralta</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="auth-page">
+    <!-- Left: Branding (split style) -->
+    <div class="auth-left">
+        <div class="auth-brand">
+            <div class="auth-logo">
+                <img src="assets/logo.png" alt="Saralta" class="logo-img">
+                <span>Saralta</span>
+            </div>
+            <h2>Manage teams and tasks in one place</h2>
+            <p>Create teams, assign work, and track progress — built for collaboration.</p>
+        </div>
+    </div>
+
+    <!-- Right: Sign in & Create account forms -->
+    <div class="auth-right">
+        <div class="auth-form-wrap">
+            <h1 class="auth-title">Sign in</h1>
+            <p class="auth-desc">Use your username and password to access your workspace.</p>
+
+            <div id="auth-msg" class="auth-msg" role="alert" hidden></div>
+
+            <form id="login-form" class="auth-form" onsubmit="login(event)">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="e.g. jane" required autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="••••••••" required autocomplete="current-password">
+                </div>
+                <div class="auth-support">
+                    <p class="auth-support-text">
+                        Forgot your
+                        <a href="#" class="auth-link" onclick="showResetHelp('username'); return false;">username</a>
+                        or
+                        <a href="#" class="auth-link" onclick="showResetHelp('password'); return false;">password</a>?
+                    </p>
+                    <p id="auth-support-detail" class="auth-support-detail" hidden></p>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+            </form>
+
+            <div id="reset-username-panel" class="auth-reset-panel" hidden>
+                <h3 class="auth-subtitle">Reset username</h3>
+                <p class="auth-reset-text">Use this if you know your user ID and password but forgot your username.</p>
+                <form id="reset-username-form" class="auth-form auth-form--compact" onsubmit="resetUsername(event)">
+                    <div class="form-group">
+                        <label for="reset-username-user-id">User ID</label>
+                        <input type="number" id="reset-username-user-id" placeholder="Enter your user ID" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reset-current-password">Current password</label>
+                        <input type="password" id="reset-current-password" placeholder="Current password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reset-new-username">New username</label>
+                        <input type="text" id="reset-new-username" placeholder="Choose a new username" required>
+                    </div>
+                    <button type="submit" class="btn btn-secondary btn-block">Update username</button>
+                </form>
+            </div>
+
+            <div id="reset-password-panel" class="auth-reset-panel" hidden>
+                <h3 class="auth-subtitle">Reset password</h3>
+                <p class="auth-reset-text">Use this if you know your user ID and username but forgot your password.</p>
+                <form id="reset-password-form" class="auth-form auth-form--compact" onsubmit="resetPassword(event)">
+                    <div class="form-group">
+                        <label for="reset-password-user-id">User ID</label>
+                        <input type="number" id="reset-password-user-id" placeholder="Enter your user ID" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reset-password-username">Username</label>
+                        <input type="text" id="reset-password-username" placeholder="Your username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reset-new-password">New password</label>
+                        <input type="password" id="reset-new-password" placeholder="New password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reset-new-password-confirm">Confirm new password</label>
+                        <input type="password" id="reset-new-password-confirm" placeholder="Repeat new password" required>
+                    </div>
+                    <button type="submit" class="btn btn-secondary btn-block">Update password</button>
+                </form>
+            </div>
+
+            <div class="auth-divider"><span>New to Saralta?</span></div>
+
+            <form id="register-form" class="auth-form" onsubmit="signup(event)">
+                <h3 class="auth-subtitle">Create an account</h3>
+                <div class="form-group">
+                    <label for="reg-username">Username</label>
+                    <input type="text" id="reg-username" name="username" placeholder="Choose a username" required autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label for="reg-password">Password</label>
+                    <input type="password" id="reg-password" name="password" placeholder="Choose a password" required autocomplete="new-password">
+                </div>
+                <div class="form-group">
+                    <label for="reg-role">Role</label>
+                    <select id="reg-role" name="role">
+                        <option value="Member">Member</option>
+                        <option value="Admin">Admin</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-secondary btn-block">Create account</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>
