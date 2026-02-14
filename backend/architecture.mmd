@@ -1,0 +1,96 @@
+graph TB
+    subgraph Client["Client Layer"]
+        Browser["Web Browser"]
+        Auth["auth.js<br/>Authentication"]
+        API["api.js<br/>API Client"]
+        Dashboard["dashboard.js<br/>Dashboard Logic"]
+    end
+
+    subgraph Frontend["Frontend - HTML/CSS/JS"]
+        IndexHTML["index.html<br/>Login Page"]
+        DashboardHTML["dashboard.html<br/>Dashboard"]
+        CSS["style.css<br/>Styling"]
+    end
+
+    subgraph Server["FastAPI Backend Server"]
+        MainApp["main.py<br/>FastAPI Application"]
+        CORS["CORS Middleware"]
+        Routes["REST API Routes"]
+    end
+
+    subgraph Business["Business Logic Layer"]
+        Auth_Module["auth.py<br/>Authentication & JWT"]
+        CRUD["crud.py<br/>Database Operations"]
+        Schemas["schemas.py<br/>Pydantic Models"]
+        Sessions["sessions.py<br/>Session Management"]
+    end
+
+    subgraph Database["Data Layer"]
+        SQLite["SQLite Database<br/>task.db"]
+        ORM["SQLAlchemy ORM<br/>Models & Sessions"]
+    end
+
+    subgraph DataModels["Core Data Models"]
+        Users["Users<br/>username, password"]
+        Teams["Teams<br/>team info, settings"]
+        TeamMembers["TeamMembers<br/>user-team relations"]
+        Activities["Activities<br/>Divisions/Projects"]
+        Tasks["Tasks<br/>task details, status"]
+        Comments["Comments<br/>task discussions"]
+        Invitations["TeamInvitations<br/>pending approvals"]
+        Messages["ActivityMessages<br/>project logbook"]
+        CompletionRequests["TaskCompletion<br/>requests with proofs"]
+    end
+
+    subgraph Storage["File Storage"]
+        Uploads["uploads/ directory<br/>completion_proofs"]
+        Logs["logs/ directory<br/>app.log with rotation"]
+    end
+
+    subgraph Config["Configuration"]
+        DbConfig["database.py<br/>SQLAlchemy config"]
+        AppConfig["config.py<br/>App settings"]
+        Requirements["requirements.txt<br/>Dependencies"]
+    end
+
+    Browser -->|HTTP Requests| IndexHTML
+    Browser -->|HTTP Requests| DashboardHTML
+    IndexHTML --> Auth
+    DashboardHTML --> Dashboard
+    Auth -->|API Calls| API
+    Dashboard -->|API Calls| API
+    API -->|REST Calls| MainApp
+    
+    MainApp --> CORS
+    CORS --> Routes
+    Routes -->|Uses| Auth_Module
+    Routes -->|Uses| CRUD
+    Routes -->|Uses| Schemas
+    Routes -->|Uses| Sessions
+    
+    CRUD -->|Queries| ORM
+    ORM -->|Read/Write| SQLite
+    
+    SQLite --> Users
+    SQLite --> Teams
+    SQLite --> TeamMembers
+    SQLite --> Activities
+    SQLite --> Tasks
+    SQLite --> Comments
+    SQLite --> Invitations
+    SQLite --> Messages
+    SQLite --> CompletionRequests
+    
+    Routes -->|File Upload/Download| Uploads
+    MainApp -->|Logging| Logs
+    ORM -->|Configuration| DbConfig
+    MainApp -->|Configuration| AppConfig
+    
+    style Client fill:#e1f5ff
+    style Frontend fill:#fff3e0
+    style Server fill:#f3e5f5
+    style Business fill:#e8f5e9
+    style Database fill:#fce4ec
+    style DataModels fill:#ede7f6
+    style Storage fill:#f1f8e9
+    style Config fill:#fff9c4

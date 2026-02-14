@@ -1,0 +1,100 @@
+graph LR
+    subgraph Frontend["Frontend Client"]
+        UI["Web UI<br/>HTML/CSS/JS"]
+    end
+    
+    subgraph Auth_API["Authentication Endpoints"]
+        Login["/auth/login<br/>POST"]
+        Register["/auth/register<br/>POST"]
+        Logout["/auth/logout<br/>POST"]
+    end
+    
+    subgraph User_API["User Management"]
+        GetUsers["/users<br/>GET"]
+        GetUser["/users/:id<br/>GET"]
+        UpdateUser["/users/:id<br/>PUT"]
+    end
+    
+    subgraph Team_API["Team Management"]
+        GetTeams["/teams<br/>GET"]
+        CreateTeam["/teams<br/>POST"]
+        UpdateTeam["/teams/:id<br/>PUT"]
+        AddMember["/teams/:id/members<br/>POST"]
+        InviteUser["/teams/:id/invite<br/>POST"]
+    end
+    
+    subgraph Activity_API["Activity/Project Management"]
+        GetActivities["/activities<br/>GET"]
+        CreateActivity["/activities<br/>POST"]
+        UpdateActivity["/activities/:id<br/>PUT"]
+    end
+    
+    subgraph Task_API["Task Management"]
+        GetTasks["/tasks<br/>GET"]
+        CreateTask["/tasks<br/>POST"]
+        UpdateTask["/tasks/:id<br/>PUT"]
+        GetTask["/tasks/:id<br/>GET"]
+        CompleteTask["/tasks/:id/complete<br/>POST"]
+    end
+    
+    subgraph Comment_API["Comments & Messages"]
+        GetComments["/comments<br/>GET"]
+        AddComment["/comments<br/>POST"]
+        GetMessages["/activities/:id/messages<br/>GET"]
+    end
+    
+    subgraph Upload_API["File Operations"]
+        UploadProof["/upload/proof<br/>POST"]
+        DownloadProof["/download/:path<br/>GET"]
+    end
+    
+    subgraph Database["SQLAlchemy ORM"]
+        DB[(SQLite Database<br/>task.db)]
+    end
+    
+    UI -->|HTTP Request| Login
+    UI -->|HTTP Request| Register
+    UI -->|HTTP Request| Logout
+    
+    UI -->|HTTP Request| GetTeams
+    UI -->|HTTP Request| CreateTeam
+    UI -->|HTTP Request| UpdateTeam
+    UI -->|HTTP Request| AddMember
+    UI -->|HTTP Request| InviteUser
+    
+    UI -->|HTTP Request| GetTasks
+    UI -->|HTTP Request| CreateTask
+    UI -->|HTTP Request| UpdateTask
+    UI -->|HTTP Request| CompleteTask
+    
+    UI -->|HTTP Request| GetActivities
+    UI -->|HTTP Request| CreateActivity
+    
+    UI -->|HTTP Request| GetComments
+    UI -->|HTTP Request| AddComment
+    UI -->|HTTP Request| GetMessages
+    
+    UI -->|HTTP Request| UploadProof
+    UI -->|HTTP Request| DownloadProof
+    
+    Login -->|Query/Update| DB
+    Register -->|Query/Update| DB
+    GetTeams -->|Query| DB
+    CreateTeam -->|Update| DB
+    UpdateTeam -->|Update| DB
+    GetTasks -->|Query| DB
+    CreateTask -->|Update| DB
+    UpdateTask -->|Update| DB
+    CompleteTask -->|Update| DB
+    GetActivities -->|Query| DB
+    UploadProof -->|File Store| DB
+    
+    style Frontend fill:#e1f5ff
+    style Auth_API fill:#f3e5f5
+    style User_API fill:#f3e5f5
+    style Team_API fill:#e8f5e9
+    style Activity_API fill:#e8f5e9
+    style Task_API fill:#e8f5e9
+    style Comment_API fill:#fff3e0
+    style Upload_API fill:#fff3e0
+    style Database fill:#fce4ec

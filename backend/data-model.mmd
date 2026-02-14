@@ -1,0 +1,106 @@
+erDiagram
+    USERS ||--o{ TEAM_MEMBERS : "joins"
+    USERS ||--o{ TASKS : "assigned_to"
+    USERS ||--o{ TASKS : "created_by"
+    USERS ||--o{ COMMENTS : "creates"
+    USERS ||--o{ TEAM_INVITATIONS : "receives"
+    USERS ||--o{ TEAM_INVITATIONS : "invited_by"
+    USERS ||--o{ ACTIVITY_MESSAGES : "posts"
+    
+    TEAMS ||--o{ TEAM_MEMBERS : "has"
+    TEAMS ||--o{ TASKS : "contains"
+    TEAMS ||--o{ ACTIVITIES : "has"
+    TEAMS ||--o{ TEAM_INVITATIONS : "sends"
+    TEAMS ||--o{ ACTIVITY_MESSAGES : "generates"
+    
+    ACTIVITIES ||--o{ TASKS : "organizes"
+    ACTIVITIES ||--o{ ACTIVITY_MESSAGES : "logs"
+    
+    TASKS ||--o{ COMMENTS : "receives"
+    TASKS ||--o{ TASK_COMPLETION_REQUESTS : "has"
+    
+    USERS {
+        int id PK
+        string username UK
+        string password
+        string role
+        datetime created_at
+    }
+    
+    TEAMS {
+        int id PK
+        string name
+        int created_by FK
+        string status
+        int only_admins_assign
+        datetime created_at
+    }
+    
+    TEAM_MEMBERS {
+        int id PK
+        int user_id FK
+        int team_id FK
+        string role
+        datetime joined_at
+    }
+    
+    ACTIVITIES {
+        int id PK
+        string name
+        string type
+        int team_id FK
+        datetime created_at
+    }
+    
+    TASKS {
+        int id PK
+        string title
+        string description
+        string status
+        string priority
+        date due_date
+        int assigned_to FK
+        int team_id FK
+        int activity_id FK
+        int created_by FK
+        int lead_person_id FK
+        int percent_share
+        string task_type
+        int is_approved
+    }
+    
+    COMMENTS {
+        int id PK
+        int task_id FK
+        int user_id FK
+        string content
+        datetime created_at
+    }
+    
+    TEAM_INVITATIONS {
+        int id PK
+        int team_id FK
+        int user_id FK
+        int invited_by FK
+        string role
+        string status
+        datetime created_at
+    }
+    
+    ACTIVITY_MESSAGES {
+        int id PK
+        int activity_id FK
+        int user_id FK
+        string message_type
+        string content
+        datetime created_at
+    }
+    
+    TASK_COMPLETION_REQUESTS {
+        int id PK
+        int task_id FK
+        int requested_by FK
+        int approver_id FK
+        string status
+        datetime created_at
+    }

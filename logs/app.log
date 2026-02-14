@@ -1,0 +1,11 @@
+2026-02-07 14:20:59,144 - __main__ - INFO - Database tables created successfully
+2026-02-07 14:20:59,187 - __main__ - INFO - Migration: added column tasks.lead_person_id
+2026-02-07 14:20:59,200 - __main__ - INFO - Migration: added column tasks.percent_share
+2026-02-07 14:20:59,207 - __main__ - INFO - Migration: added column tasks.closure_approver_id
+2026-02-07 14:20:59,222 - __main__ - INFO - Migration: added column tasks.is_approved
+2026-02-07 14:20:59,222 - __main__ - INFO - Migration: ensured team_invitations table
+2026-02-07 14:20:59,222 - __main__ - INFO - Migration: ensured activities table
+2026-02-07 14:20:59,226 - __main__ - INFO - Migration: ensured activity_messages table
+2026-02-07 14:20:59,226 - __main__ - INFO - Migration: ensured task_completion_requests table
+2026-02-07 14:20:59,228 - __main__ - INFO - Migration: ensured task_extension_requests table
+2026-02-07 14:20:59,228 - __main__ - INFO - FastAPI application initialized
