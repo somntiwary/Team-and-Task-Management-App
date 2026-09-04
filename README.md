@@ -205,9 +205,3 @@ The FastAPI application exposes routes for:
 - Activity chat, comments, notifications, and audit history
 - Dashboard statistics and session monitoring
 - AI assistant chat
-
-Use the interactive documentation at `/docs` to explore and test the available endpoints.
-
-## License
-
-No license file is currently included in this repository.
