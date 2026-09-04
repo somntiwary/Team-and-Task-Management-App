@@ -38,7 +38,7 @@ Then open in your browser:
 | What        | Command                                      | URL                    |
 |------------|-----------------------------------------------|------------------------|
 | Backend    | `cd backend` then `uvicorn main:app --reload --host 0.0.0.0 --port 8000` | http://127.0.0.1:8000  |
-| Frontend   | `cd frontend` then `python -m http.server 3000` | http://localhost:3000   |
+| Frontend   | `cd frontend` then `python -m http.server 3030` | http://localhost:3000   |
 
 Keep both terminals open while you use the app.
 

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Saralta</title>
+    <link rel="stylesheet" href="css/style.css?v=15">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="app-body">
+    <header class="topbar">
+        <div class="topbar-left">
+            <div class="app-logo">
+                <img src="assets/logo.png" alt="Saralta" class="logo-img">
+                <span>Saralta</span>
+            </div>
+        </div>
+        <div class="topbar-right">
+            <div class="notification-wrap">
+                <button type="button" class="topbar-icon-btn" id="notification-trigger" aria-haspopup="true" aria-expanded="false" aria-label="Notifications">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 1 0-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5"></path>
+                        <path d="M10 20a2 2 0 0 0 4 0"></path>
+                    </svg>
+                    <span class="notification-badge" id="notification-count" hidden>0</span>
+                </button>
+                <div class="notification-dropdown" id="notification-dropdown" hidden></div>
+            </div>
+            <div class="profile-menu">
+                <button type="button" class="profile-menu-trigger" id="profile-menu-trigger" aria-haspopup="true" aria-expanded="false">
+                    <div class="user-info">
+                        <div class="user-avatar" id="user-avatar"></div>
+                        <div class="user-meta">
+                            <span class="user-name" id="user-badge">User</span>
+                            <span class="user-role">ID: <span id="topbar-user-id">-</span> &middot; <span id="user-role">Member</span></span>
+                        </div>
+                    </div>
+                </button>
+                <div class="profile-menu-dropdown" id="profile-menu-dropdown" hidden>
+                    <button type="button" class="profile-menu-item" id="profile-edit-name">Edit name</button>
+                </div>
+            </div>
+            <button type="button" class="btn btn-ghost" onclick="goToDashboard()">Workspace</button>
+            <button type="button" class="btn btn-ghost" onclick="goToBoardPage()">Dashboard</button>
+            <button type="button" class="btn btn-ghost" onclick="goToStatisticsPage()">Statistics</button>
+        </div>
+    </header>
+
+    <div class="dashboard-layout">
+        <aside class="sidebar" aria-label="Primary navigation">
+            <div class="sidebar-inner">
+                <div class="sidebar-header">
+                    <div class="sidebar-title-wrap">
+                        <div class="sidebar-title sidebar-title--main"><h3>Command Panel</h3></div>
+                    </div>
+                    <button type="button" class="sidebar-collapse-btn" id="sidebar-collapse-btn" onclick="toggleSidebarCollapse()" aria-label="Collapse sidebar" aria-expanded="true" title="Collapse sidebar">
+                        <span class="sidebar-collapse-btn-bar" aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div class="sidebar-title">Navigation</div>
+                <nav class="sidebar-nav">
+                    <button type="button" class="sidebar-item sidebar-item--overview sidebar-item--active" aria-current="page">
+                        <span class="sidebar-overview-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 11.5 12 4l9 7.5"></path>
+                                <path d="M5 10.5V20h14v-9.5"></path>
+                            </svg>
+                        </span>
+                        <span class="sidebar-label">Home</span>
+                    </button>
+                    <button type="button" class="sidebar-item sidebar-item--workspace" onclick="goToDashboard()">
+                        <span class="sidebar-workspace-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+                                <path d="M3 10h18"></path>
+                            </svg>
+                        </span>
+                        <span class="sidebar-label">Workspace</span>
+                    </button>
+                    <button type="button" class="sidebar-item sidebar-item--board" onclick="goToBoardPage()">
+                        <span class="sidebar-board-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+                                <path d="M8 8h.01"></path>
+                                <path d="M12 8h5"></path>
+                                <path d="M8 12h.01"></path>
+                                <path d="M12 12h5"></path>
+                                <path d="M8 16h.01"></path>
+                                <path d="M12 16h5"></path>
+                            </svg>
+                        </span>
+                        <span class="sidebar-label">Dashboard</span>
+                    </button>
+                    <button type="button" class="sidebar-item sidebar-item--stats" onclick="goToStatisticsPage()">
+                        <span class="sidebar-stats-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="18" y1="20" x2="18" y2="10"></line>
+                                <line x1="12" y1="20" x2="12" y2="4"></line>
+                                <line x1="6" y1="20" x2="6" y2="14"></line>
+                            </svg>
+                        </span>
+                        <span class="sidebar-label">Statistics</span>
+                    </button>
+                    <button type="button" class="sidebar-item sidebar-item--gantt" onclick="goToGanttViewPage()">
+                        <span class="sidebar-gantt-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 6h16"></path>
+                                <path d="M4 12h10"></path>
+                                <path d="M4 18h7"></path>
+                                <rect x="8" y="5" width="5" height="2" rx="1"></rect>
+                                <rect x="10" y="11" width="8" height="2" rx="1"></rect>
+                                <rect x="7" y="17" width="11" height="2" rx="1"></rect>
+                            </svg>
+                        </span>
+                        <span class="sidebar-label">Gantt View</span>
+                    </button>
+                    <button type="button" class="sidebar-item sidebar-item--help" onclick="window.location.href='help.html'">
+                        <span class="sidebar-help-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="9"></circle>
+                                <path d="M9.4 9a2.6 2.6 0 1 1 4.6 1.6c-.7.8-1.6 1.2-2 1.9-.2.3-.3.6-.3 1.1"></path>
+                                <circle cx="12" cy="17.2" r="1"></circle>
+                            </svg>
+                        </span>
+                        <span class="sidebar-label">Help Center</span>
+                    </button>
+                    <button type="button" class="sidebar-item sidebar-item--my-info" onclick="window.location.href='my-info.html'">
+                        <span class="sidebar-my-info-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21a8 8 0 1 0-16 0"></path>
+                                <circle cx="12" cy="8" r="4"></circle>
+                            </svg>
+                        </span>
+                        <span class="sidebar-label">My Info</span>
+                    </button>
+                </nav>
+                <div class="sidebar-footer">
+                    <button type="button" class="sidebar-item sidebar-item--logout" onclick="logout()">
+                        <span class="sidebar-logout-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                <polyline points="16 17 21 12 16 7"></polyline>
+                                <line x1="21" y1="12" x2="9" y2="12"></line>
+                            </svg>
+                        </span>
+                        <span class="sidebar-label">Log out</span>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <section class="home-hero">
+                <div class="home-hero-backdrop"></div>
+                <div class="home-hero-content">
+                    <p class="home-eyebrow">DRDO team and task management platform</p>
+                    <h1 class="home-title">Coordinated execution for divisions, groups, activities, and teams on your internal LAN.</h1>
+                    <p class="home-desc">
+                        Saralta brings your operational hierarchy, task assignment, approval flow, proof-based completion, chat, history, and analytics into one controlled workspace designed for mission-focused internal collaboration.
+                    </p>
+                    <div class="home-cta-row">
+                        <button type="button" class="btn btn-primary" onclick="goToDashboard()">Open workspace</button>
+                        <button type="button" class="btn btn-ghost home-ghost-btn" onclick="goToStatisticsPage()">View statistics</button>
+                    </div>
+                </div>
+                <div class="home-hero-logo-stage" aria-label="DRDO brand mark">
+                    <video class="home-hero-logo-video" autoplay muted loop playsinline preload="auto">
+                        <source src="assets/drdo_logo_animation.mp4" type="video/mp4">
+                    </video>
+                </div>
+            </section>
+
+            <section class="home-grid home-grid--summary">
+                <article class="home-card home-card--intro">
+                    <p class="home-card-eyebrow">Platform purpose</p>
+                    <h2 class="home-card-title">What this software does</h2>
+                    <p class="home-card-text">
+                        This application is a structured coordination system for internal DRDO work. It mirrors your reporting chain from division level down to team level, then connects that hierarchy directly to execution through tasks and subtasks.
+                    </p>
+                </article>
+                <article class="home-card">
+                    <p class="home-card-eyebrow">Built from your project flow</p>
+                    <h2 class="home-card-title">How work moves inside Saralta</h2>
+                    <ul class="home-list">
+                        <li>Admins and heads define the organizational hierarchy: division, group, activity, and team.</li>
+                        <li>Authorized users create tasks, distribute responsibility, and track due dates, priority, and ownership.</li>
+                        <li>Members collaborate with subtasks, activity chat, extension requests, and proof-based completion.</li>
+                    </ul>
+                </article>
+                <article class="home-card">
+                    <p class="home-card-eyebrow">Operational controls</p>
+                    <h2 class="home-card-title">Why it fits a controlled LAN environment</h2>
+                    <ul class="home-list">
+                        <li>Runs as an internal system for organizational use without depending on public cloud workflow tools.</li>
+                        <li>Supports role-based control for admins, division heads, group heads, project directors, team leads, and members.</li>
+                        <li>Keeps execution evidence, approval checkpoints, history logs, and workspace analytics inside the same environment.</li>
+                    </ul>
+                </article>
+            </section>
+
+            <section class="home-workflow home-card" aria-labelledby="home-workflow-title">
+                <div class="home-workflow-head">
+                    <p class="home-card-eyebrow">Hierarchy workflow</p>
+                    <h2 class="home-card-title" id="home-workflow-title">How structure flows into execution</h2>
+                    <p class="home-card-text">Saralta mirrors your operational chain from leadership structure to on-ground task execution. Each stage feeds the next, so ownership and reporting stay clear.</p>
+                </div>
+                <div class="home-workflow-track">
+                    <div class="home-workflow-line" aria-hidden="true"></div>
+                    <article class="home-workflow-step home-workflow-step--division">
+                        <span class="home-workflow-node"></span>
+                        <span class="home-workflow-label">Division</span>
+                        <strong class="home-workflow-title-sm">Strategic control</strong>
+                        <p class="home-workflow-copy">Top-level mission area and leadership scope.</p>
+                    </article>
+                    <article class="home-workflow-step home-workflow-step--group">
+                        <span class="home-workflow-node"></span>
+                        <span class="home-workflow-label">Group</span>
+                        <strong class="home-workflow-title-sm">Functional channel</strong>
+                        <p class="home-workflow-copy">Breaks the division into focused operating groups.</p>
+                    </article>
+                    <article class="home-workflow-step home-workflow-step--activity">
+                        <span class="home-workflow-node"></span>
+                        <span class="home-workflow-label">Activity</span>
+                        <strong class="home-workflow-title-sm">Work package</strong>
+                        <p class="home-workflow-copy">Defines the actual programme, buildup, study, or mission stream.</p>
+                    </article>
+                    <article class="home-workflow-step home-workflow-step--team">
+                        <span class="home-workflow-node"></span>
+                        <span class="home-workflow-label">Team</span>
+                        <strong class="home-workflow-title-sm">Execution unit</strong>
+                        <p class="home-workflow-copy">Assigns accountable people for coordinated delivery.</p>
+                    </article>
+                    <article class="home-workflow-step home-workflow-step--task">
+                        <span class="home-workflow-node"></span>
+                        <span class="home-workflow-label">Task</span>
+                        <strong class="home-workflow-title-sm">Tracked output</strong>
+                        <p class="home-workflow-copy">Turns hierarchy into measurable work, approvals, and closure.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="home-grid home-grid--details">
+                <article class="home-card">
+                    <p class="home-card-eyebrow">Core capabilities</p>
+                    <h2 class="home-card-title">What your project already supports</h2>
+                    <ul class="home-list">
+                        <li>Hierarchy management for divisions, groups, activities, and teams.</li>
+                        <li>Task creation with single or multi-assignee ownership, lead assignment, share percentage, priority, and due dates.</li>
+                        <li>Approval-aware execution for task creation, task type control, completion review, and deadline extension requests.</li>
+                        <li>Activity-level communication and history tracking for operational transparency.</li>
+                        <li>Statistics and hierarchy matrix views for monitoring delivery and organizational coverage.</li>
+                    </ul>
+                </article>
+                <article class="home-card">
+                    <p class="home-card-eyebrow">Use case focus</p>
+                    <h2 class="home-card-title">Where this homepage positions the application</h2>
+                    <p class="home-card-text" id="home-use-case-text">
+                        This workspace is suited for internal program coordination, project execution tracking, inter-team task breakdown, leadership oversight, and evidence-backed task closure across technical and operational units.
+                    </p>
+                    <div class="home-badges">
+                        <span class="home-badge">Hierarchy-driven</span>
+                        <span class="home-badge">Role-controlled</span>
+                        <span class="home-badge">LAN-ready</span>
+                        <span class="home-badge">Approval-aware</span>
+                    </div>
+                </article>
+            </section>
+
+            <section class="home-grid home-grid--insights">
+                <article class="home-card">
+                    <p class="home-card-eyebrow">Live workspace insight</p>
+                    <h2 class="home-card-title">Current operational picture</h2>
+                    <div class="home-insight-list" id="home-insights">
+                        <p class="home-card-text">Loading project insights...</p>
+                    </div>
+                </article>
+                <article class="home-card home-card--quicklinks">
+                    <p class="home-card-eyebrow">Quick access</p>
+                    <h2 class="home-card-title">Move directly to action</h2>
+                    <div class="home-quick-actions">
+                        <button type="button" class="home-quick-action" onclick="goToDashboard()">
+                            <span class="home-quick-action-title">Open workspace</span>
+                            <span class="home-quick-action-text">Create teams, assign work, manage tasks, and review activity.</span>
+                        </button>
+                        <button type="button" class="home-quick-action" onclick="goToStatisticsPage()">
+                            <span class="home-quick-action-title">Open statistics</span>
+                            <span class="home-quick-action-text">Review completion, due dates, priority load, and hierarchy coverage.</span>
+                        </button>
+                    </div>
+                </article>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/api.js?v=9"></script>
+    <script src="js/topbar.js?v=1"></script>
+    <script src="js/assistant.js?v=5"></script>
+    <script src="js/home.js?v=7"></script>
+</body>
+</html>

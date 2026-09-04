@@ -9,3 +9,27 @@
 2026-02-07 14:20:59,226 - __main__ - INFO - Migration: ensured task_completion_requests table
 2026-02-07 14:20:59,228 - __main__ - INFO - Migration: ensured task_extension_requests table
 2026-02-07 14:20:59,228 - __main__ - INFO - FastAPI application initialized
+2026-03-17 07:27:45,184 - main - INFO - Database tables created successfully
+2026-03-17 07:27:45,192 - main - INFO - Migration: ensured team_invitations table
+2026-03-17 07:27:45,192 - main - INFO - Migration: ensured activities table
+2026-03-17 07:27:45,192 - main - INFO - Migration: ensured divisions table
+2026-03-17 07:27:45,192 - main - INFO - Migration: ensured groups table
+2026-03-17 07:27:45,198 - main - INFO - Migration: added column teams.activity_id
+2026-03-17 07:27:45,207 - main - INFO - Migration: added column tasks.parent_task_id
+2026-03-17 07:27:45,213 - main - INFO - Migration: added column activities.group_id
+2026-03-17 07:27:45,218 - main - INFO - Migration: added column activities.created_by
+2026-03-17 07:27:45,218 - main - INFO - Migration: ensured activity_messages table
+2026-03-17 07:27:45,218 - main - INFO - Migration: ensured task_completion_requests table
+2026-03-17 07:27:45,218 - main - INFO - Migration: ensured task_extension_requests table
+2026-03-17 07:27:45,222 - main - INFO - Migration: ensured task_assignments table
+2026-03-17 07:27:45,222 - main - INFO - FastAPI application initialized (stats: /stats, /dashboard/stats, /api/dashboard/statistics)
+2026-03-17 07:36:48,850 - main - INFO - Database tables created successfully
+2026-03-17 07:36:48,850 - main - INFO - Migration: ensured team_invitations table
+2026-03-17 07:36:48,850 - main - INFO - Migration: ensured activities table
+2026-03-17 07:36:48,850 - main - INFO - Migration: ensured divisions table
+2026-03-17 07:36:48,850 - main - INFO - Migration: ensured groups table
+2026-03-17 07:36:48,859 - main - INFO - Migration: ensured activity_messages table
+2026-03-17 07:36:48,859 - main - INFO - Migration: ensured task_completion_requests table
+2026-03-17 07:36:48,859 - main - INFO - Migration: ensured task_extension_requests table
+2026-03-17 07:36:48,861 - main - INFO - Migration: ensured task_assignments table
+2026-03-17 07:36:48,862 - main - INFO - FastAPI application initialized (stats: /stats, /dashboard/stats, /api/dashboard/statistics)

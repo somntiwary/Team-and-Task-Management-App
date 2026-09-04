@@ -16,18 +16,39 @@ import sessions
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
+def _normalize_password(password: str) -> str:
+    """
+    Ensure password is within bcrypt's 72-byte limit.
+    Bcrypt ignores anything after 72 bytes; we truncate explicitly
+    so extremely long inputs don't cause errors.
+    """
+    if password is None:
+        return ""
+    data = password.encode("utf-8", errors="ignore")
+    if len(data) > 72:
+        data = data[:72]
+    return data.decode("utf-8", errors="ignore")
+
+
 def hash_password(password: str) -> str:
     """
     Hash a plain text password using bcrypt.
     """
-    return pwd_context.hash(password)
+    normalized = _normalize_password(password)
+    return pwd_context.hash(normalized)
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """
     Verify a plain text password against a hashed password.
     """
-    return pwd_context.verify(plain_password, hashed_password)
+    normalized = _normalize_password(plain_password)
+    try:
+        return pwd_context.verify(normalized, hashed_password)
+    except Exception:
+        # Any bcrypt / backend error (including >72-byte issues) should be treated
+        # as a simple verification failure, not a server error.
+        return False
 
 
 # ------------------------------------------------------------------
@@ -74,7 +95,8 @@ def login_user(user_login: UserLogin, db: Session = Depends(get_db)):
         "session_token": session_token,
         "user_id": user.id,
         "username": user.username,
-        "role": role_normalized
+        "role": role_normalized,
+        "designation": user.designation,
     }
 
 

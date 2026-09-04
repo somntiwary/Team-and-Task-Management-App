@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saralta</title>
+    <title>Dashboard - Saralta</title>
     <link rel="stylesheet" href="css/style.css?v=15">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
-<body class="app-body workspace-page">
+<body class="app-body workspace-views-page board-page">
     <header class="topbar">
         <div class="topbar-left">
             <div class="app-logo">
@@ -74,7 +74,7 @@
                         </span>
                         <span class="sidebar-label">Home</span>
                     </button>
-                    <button type="button" class="sidebar-item sidebar-item--workspace sidebar-item--active" aria-current="page">
+                    <button type="button" class="sidebar-item sidebar-item--workspace" onclick="window.location.href='dashboard.html'">
                         <span class="sidebar-workspace-icon" aria-hidden="true">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <rect x="3" y="4" width="18" height="16" rx="2"></rect>
@@ -83,7 +83,7 @@
                         </span>
                         <span class="sidebar-label">Workspace</span>
                     </button>
-                    <button type="button" class="sidebar-item sidebar-item--board" onclick="window.location.href='workspace-views.html'">
+                    <button type="button" class="sidebar-item sidebar-item--board sidebar-item--active" aria-current="page">
                         <span class="sidebar-board-icon" aria-hidden="true">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <rect x="3" y="4" width="18" height="16" rx="2"></rect>
@@ -168,7 +168,7 @@
 
         <main class="main-content">
             <!-- Welcome strip -->
-            <section class="dashboard-hero">
+            <section class="dashboard-hero" hidden>
                 <div class="hero-greeting">
                     <h1 class="hero-title">Hi, <span id="hero-username">there</span></h1>
                     <p class="hero-desc">Here’s your workspace overview. <strong>Your user ID: <span
@@ -200,11 +200,11 @@
                 </div>
             </section>
 
-            <section class="quick-nav-section" id="quick-nav-section" hidden>
+            <section class="quick-nav-section quick-nav-section--board" id="quick-nav-section" hidden>
                 <div class="quick-nav-shell">
                     <div class="quick-nav-copy">
                         <p class="quick-nav-eyebrow">Quick Access</p>
-                        <h2 class="quick-nav-title" id="quick-nav-title">Jump to your workspace sections</h2>
+                        <h2 class="quick-nav-title" id="quick-nav-title">Move across your dashboard in one tap</h2>
                     </div>
                     <div class="quick-nav-tabs" id="quick-nav-tabs" role="tablist" aria-label="Page section navigation"></div>
                 </div>
@@ -251,432 +251,8 @@
                 </div>
             </section>
 
-            <!-- Teams -->
-            <section class="content-section" id="teams">
-                <div class="cards-row">
-                    <!-- Division Creation (Admin only) -->
-                    <div class="card card--create" id="division-section" style="display: none;">
-                        <div class="card-icon-wrap">
-                            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                                <line x1="3" y1="9" x2="21" y2="9"/>
-                            </svg>
-                        </div>
-                        <h3 class="card-title">Create division</h3>
-                        <div class="form-group">
-                            <label for="division-name">Division name</label>
-                            <input type="text" id="division-name" placeholder="e.g. Technology" class="input">
-                        </div>
-                        <div class="form-group">
-                            <label for="division-head">Division Head (Optional)</label>
-                            <select id="division-head" class="input">
-                                <option value="">Select user</option>
-                            </select>
-                        </div>
-                        <button type="button" class="btn btn-primary" onclick="createDivision()">Create division</button>
-                    </div>
-
-                    <!-- Group Creation (Division Head & Admin) -->
-                    <div class="card card--create" id="group-section" style="display: none;">
-                        <div class="card-icon-wrap">
-                            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                            </svg>
-                        </div>
-                        <h3 class="card-title">Create group</h3>
-                        <div class="form-group">
-                            <label for="group-division">Division</label>
-                            <select id="group-division" class="input">
-                                <option value="">Select division</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="group-name">Group name</label>
-                            <input type="text" id="group-name" placeholder="e.g. Engineering Group" class="input">
-                        </div>
-                        <div class="form-group">
-                            <label for="group-head">Group Head (Optional)</label>
-                            <select id="group-head" class="input">
-                                <option value="">Optional (set later from Manage Users)</option>
-                            </select>
-                        </div>
-                        <button type="button" class="btn btn-primary" onclick="createGroup()">Create group</button>
-                    </div>
-
-                    <!-- Activity Creation (Group Head & above) -->
-                    <div class="card card--action" id="activity-section" style="display: none;">
-                        <div class="card-icon-wrap">
-                            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M3 13h4l3 7 4-14 3 7h4" />
-                            </svg>
-                        </div>
-                        <h3 class="card-title">Create activity/project</h3>
-                        <div class="form-group">
-                            <label for="activity-create-kind">Create</label>
-                            <select id="activity-create-kind" class="input" onchange="toggleActivityCreationMode()">
-                                <option value="activity" selected>Activity</option>
-                                <option value="project">Project</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="activity-group">Group</label>
-                            <select id="activity-group" class="input">
-                                <option value="">Select group</option>
-                            </select>
-                        </div>
-                        <div class="form-group" id="activity-type-group">
-                            <label for="activity-type">Type</label>
-                            <select id="activity-type" class="input" onchange="toggleActivityCustomTypeInput()">
-                                <option value="Buildup">Buildup</option>
-                                <option value="Infrastructure Activity">Infrastructure Activity</option>
-                                <option value="Feasibility Study">Feasibility Study</option>
-                                <option value="Others">Others</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="activity-name" id="activity-name-label">Activity name</label>
-                            <input type="text" id="activity-name" placeholder="e.g. Instrumentation buildup" class="input">
-                        </div>
-                        <div class="form-group" id="activity-custom-type-wrap" style="display:none;">
-                            <label for="activity-custom-type">Custom activity type (Optional)</label>
-                            <input type="text" id="activity-custom-type" placeholder="Enter custom activity type" class="input">
-                        </div>
-                        <button type="button" class="btn btn-primary" id="create-activity-btn" onclick="createActivity()">Create activity</button>
-                    </div>
-
-                    <!-- Team Creation (Group Head & above) -->
-                    <div class="card card--create" id="team-section" style="display: none;">
-                        <div class="card-icon-wrap">
-                            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="12" y1="5" x2="12" y2="19" />
-                                <line x1="5" y1="12" x2="19" y2="12" />
-                            </svg>
-                        </div>
-                        <h3 class="card-title">Create team</h3>
-                        <div class="form-group">
-                            <label for="team-activity">Activity / Project</label>
-                            <select id="team-activity" class="input">
-                                <option value="">Select activity or project</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="team-name">Team name</label>
-                            <input type="text" id="team-name" placeholder="e.g. Frontend Team" class="input">
-                        </div>
-                        <button type="button" class="btn btn-primary" onclick="createTeam()">Create team</button>
-                    </div>
-                    <div class="card card--action" id="holiday-admin-card" style="display:none;">
-                        <div class="card-icon-wrap">
-                            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                                <line x1="16" y1="2" x2="16" y2="6" />
-                                <line x1="8" y1="2" x2="8" y2="6" />
-                                <line x1="3" y1="10" x2="21" y2="10" />
-                            </svg>
-                        </div>
-                        <h3 class="card-title">Manage holidays</h3>
-                        <div class="form-group">
-                            <label for="holiday-date">Holiday date</label>
-                            <input type="date" id="holiday-date" class="input">
-                        </div>
-                        <div class="form-group">
-                            <label for="holiday-name">Holiday name</label>
-                            <input type="text" id="holiday-name" class="input" placeholder="e.g. Independence Day">
-                        </div>
-                        <button type="button" class="btn btn-primary" onclick="createHolidayFromDashboard()">Add holiday</button>
-                        <div class="form-group" style="margin-top: 12px;">
-                            <label>Saved holidays</label>
-                            <div id="holiday-list" class="member-bulk-list"></div>
-                        </div>
-                    </div>
-                    <div class="card card--action" id="milestone-admin-card" style="display:none;">
-                        <div class="card-icon-wrap">
-                            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 2l2.4 5.3 5.8.7-4.2 4 1.1 5.8L12 14.9 6.9 17.8 8 12 3.8 8l5.8-.7z" />
-                            </svg>
-                        </div>
-                        <h3 class="card-title">Manage milestones</h3>
-                        <p class="card-help-text">Milestones are global and visible to all divisions, groups, activities, teams, and members.</p>
-                        <div class="form-group">
-                            <label for="milestone-date">Milestone date</label>
-                            <input type="date" id="milestone-date" class="input">
-                        </div>
-                        <div class="form-group">
-                            <label for="milestone-name">Milestone name</label>
-                            <input type="text" id="milestone-name" class="input" placeholder="e.g. Prototype Review">
-                        </div>
-                        <div class="form-group form-group-full dependency-toggle-wrap">
-                            <label class="dependency-toggle-label">
-                                <input type="checkbox" id="milestone-create-linked-task" onchange="toggleMilestoneTaskCreationFields()">
-                                <span>Also create as task item</span>
-                            </label>
-                            <small class="form-text">Use this if the milestone should also exist as a task, subtask, or sub-subtask.</small>
-                        </div>
-                        <div id="milestone-task-create-wrap" style="display:none;">
-                            <div class="form-group">
-                                <label for="milestone-task-level">Create as</label>
-                                <select id="milestone-task-level" class="input" onchange="toggleMilestoneTaskCreationFields()">
-                                    <option value="task">Task</option>
-                                    <option value="subtask">Subtask</option>
-                                    <option value="subsubtask">Sub-subtask</option>
-                                </select>
-                            </div>
-                            <div id="milestone-task-main-scope-wrap">
-                                <div class="form-group">
-                                    <label for="milestone-task-division">Division</label>
-                                    <select id="milestone-task-division" class="input">
-                                        <option value="">Select division</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="milestone-task-group">Group</label>
-                                    <select id="milestone-task-group" class="input">
-                                        <option value="">Select division first</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="milestone-task-activity">Activity / Project</label>
-                                    <select id="milestone-task-activity" class="input">
-                                        <option value="">Select group first</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="milestone-task-team">Team</label>
-                                    <select id="milestone-task-team" class="input">
-                                        <option value="">Select activity or project first</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div id="milestone-task-parent-scope-wrap" style="display:none;">
-                                <div class="form-group">
-                                    <label for="milestone-task-parent-level-1">Parent task</label>
-                                    <select id="milestone-task-parent-level-1" class="input" onchange="onMilestoneTaskParentLevel1Change()">
-                                        <option value="">Select parent task</option>
-                                    </select>
-                                </div>
-                                <div class="form-group" id="milestone-task-parent-level-2-wrap" style="display:none;">
-                                    <label for="milestone-task-parent-level-2">Parent subtask</label>
-                                    <select id="milestone-task-parent-level-2" class="input" onchange="onMilestoneTaskParentLevel2Change()">
-                                        <option value="">Select subtask</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group form-group-full dependency-toggle-wrap">
-                            <label class="dependency-toggle-label">
-                                <input type="checkbox" id="milestone-has-dependency" onchange="toggleMilestoneDependencyFields()">
-                                <span>Dependency</span>
-                            </label>
-                            <small class="form-text">Optionally link this milestone to a task, subtask, or sub-subtask.</small>
-                        </div>
-                        <div class="form-group" id="milestone-start-dependency-wrap" style="display:none;">
-                            <label for="milestone-start-dependency-task">Start dependency task</label>
-                            <select id="milestone-start-dependency-task" class="input">
-                                <option value="">Select task</option>
-                            </select>
-                            <select id="milestone-start-dependency-event" class="input dependency-event-select">
-                                <option value="finish">After dependency finishes</option>
-                                <option value="start">After dependency starts</option>
-                            </select>
-                        </div>
-                        <div class="form-group" id="milestone-finish-dependency-wrap" style="display:none;">
-                            <label for="milestone-finish-dependency-task">Finish dependency task</label>
-                            <select id="milestone-finish-dependency-task" class="input">
-                                <option value="">Select task</option>
-                            </select>
-                            <select id="milestone-finish-dependency-event" class="input dependency-event-select">
-                                <option value="finish">After dependency finishes</option>
-                                <option value="start">After dependency starts</option>
-                            </select>
-                        </div>
-                        <button type="button" class="btn btn-primary" onclick="createMilestoneFromDashboard()">Add milestone</button>
-                        <div class="form-group" style="margin-top: 12px;">
-                            <label>Saved milestones</label>
-                            <div id="milestone-list" class="member-bulk-list"></div>
-                        </div>
-                    </div>
-                    <div class="card card--action" id="member-section">
-                        <div class="card-icon-wrap">
-                            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                                <circle cx="8.5" cy="7" r="4" />
-                                <line x1="20" y1="8" x2="20" y2="14" />
-                                <line x1="23" y1="11" x2="17" y2="11" />
-                            </svg>
-                        </div>
-                        <h3 class="card-title">Add member to team</h3>
-                        <div class="form-group">
-                            <label for="add-member-division">Division</label>
-                            <select id="add-member-division">
-                                <option value="">Select division</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="add-member-group">Group</label>
-                            <select id="add-member-group">
-                                <option value="">Select division first</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="add-member-activity">Activity / Project</label>
-                            <select id="add-member-activity">
-                                <option value="">Select group first</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="add-member-team">Team</label>
-                            <select id="add-member-team">
-                                <option value="">Select activity or project first</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="add-member-user">User</label>
-                            <select id="add-member-user">
-                                <option value="">Select user</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="add-member-role">Role</label>
-                            <select id="add-member-role">
-                                <option value="Member">Member</option>
-                                <option value="Team Lead">Team Lead</option>
-                                <option value="Project Director">Project Director</option>
-                                <option value="Admin">Admin</option>
-                            </select>
-                        </div>
-                        <button type="button" class="btn btn-primary" onclick="addMemberToTeam()">Add member</button>
-                    </div>
-                    <!-- Admin-only management cards -->
-                    <div class="card card--action" id="delete-team-card">
-                        <div class="card-icon-wrap">
-                            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path d="M3 6h18" />
-                                <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                                <path d="M6 6l1 14a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-14" />
-                            </svg>
-                        </div>
-                        <h3 class="card-title">Delete hierarchy item</h3>
-                        <p class="card-help-text" id="delete-entity-help-text">Select the hierarchy level first, then choose the exact item to delete.</p>
-                        <div class="form-group">
-                            <label for="delete-entity-type">Delete level</label>
-                            <select id="delete-entity-type">
-                                <option value="">Select level</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="delete-division-select">Division</label>
-                            <select id="delete-division-select">
-                                <option value="">Select division</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="delete-group-select">Group</label>
-                            <select id="delete-group-select">
-                                <option value="">Select group</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="delete-activity-select">Activity / Project</label>
-                            <select id="delete-activity-select">
-                                <option value="">Select activity or project</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="delete-team-select">Team</label>
-                            <select id="delete-team-select">
-                                <option value="">Select team</option>
-                            </select>
-                        </div>
-                        <p class="card-help-text" id="delete-entity-target-summary">The delete action will become available after you select the required hierarchy path.</p>
-                        <button type="button" class="btn btn-danger" onclick="confirmDeleteEntity()">Delete selected item</button>
-                    </div>
-
-                    <div class="card card--action" id="remove-member-card">
-                        <div class="card-icon-wrap">
-                            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                                <circle cx="8.5" cy="7" r="4" />
-                                <line x1="20" y1="8" x2="20" y2="14" />
-                                <line x1="23" y1="11" x2="17" y2="11" />
-                            </svg>
-                        </div>
-                        <h3 class="card-title">Remove or shift member</h3>
-                        <div class="form-group">
-                            <label for="remove-member-division">Source Division</label>
-                            <select id="remove-member-division">
-                                <option value="">Select division</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="remove-member-group">Source Group</label>
-                            <select id="remove-member-group">
-                                <option value="">Select division first</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="remove-member-activity">Source Activity / Project</label>
-                            <select id="remove-member-activity">
-                                <option value="">Select group first</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="remove-member-team">Team</label>
-                            <select id="remove-member-team">
-                                <option value="">Optional: select team</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Team members</label>
-                            <div id="remove-member-user-list" class="member-bulk-list">
-                                <div class="member-bulk-empty">Select team first</div>
-                            </div>
-                            <p class="form-hint">Select one or more members to remove or shift.</p>
-                        </div>
-                        <div class="form-group">
-                            <label for="remove-member-action">Action</label>
-                            <select id="remove-member-action">
-                                <option value="remove" selected>Remove from team</option>
-                                <option value="shift">Shift to another team</option>
-                            </select>
-                        </div>
-                        <div id="remove-member-shift-targets" hidden>
-                            <div class="form-group">
-                                <label for="remove-member-target-division">Destination Division</label>
-                                <select id="remove-member-target-division">
-                                    <option value="">Select division</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="remove-member-target-group">Destination Group</label>
-                                <select id="remove-member-target-group">
-                                    <option value="">Select division first</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="remove-member-target-activity">Destination Activity / Project</label>
-                                <select id="remove-member-target-activity">
-                                    <option value="">Select group first</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="remove-member-target-team">Destination Team</label>
-                                <select id="remove-member-target-team">
-                                    <option value="">Select activity or project first</option>
-                                </select>
-                            </div>
-                            <p class="form-hint">Members will be added to the destination team before being removed from the current team.</p>
-                        </div>
-                        <button type="button" class="btn btn-danger" onclick="confirmRemoveMember()">Apply member action</button>
-                    </div>
-
-                </div>
-            </section>
-
-            <!-- User Management -->
-            <section class="content-section" id="users-section" style="display:none;">
+            <!-- User Management (Admin / Division Head) -->
+            <section class="content-section" id="users-section" style="display:none;" hidden>
                 <div class="section-head">
                     <span class="section-icon" aria-hidden="true">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -686,8 +262,7 @@
                             <path d="M16 3.13a4 4 0 0 1 0 7.75" />
                         </svg>
                     </span>
-                    <h2 class="section-title">Management Panel</h2>
-                    <button type="button" class="btn btn-ghost btn-sm" id="hierarchy-edit-btn" style="display:none;" onclick="openHierarchyEditModal()">Edit Hierarchy</button>
+                    <h2 class="section-title">Manage Users</h2>
                 </div>
                 <div class="users-admin-grid">
                     <div class="card card--form card--admin-create-user" id="admin-create-user-card" style="display:none;">
@@ -739,34 +314,6 @@
                         </div>
                         <div class="admin-user-subsection">
                             <div class="card-head card-head--compact">
-                                <h3>Edit/Delete role/designation</h3>
-                                <p>Update or remove an existing role or designation from the shared catalog.</p>
-                            </div>
-                            <div class="form-grid form-grid--two-col">
-                                <div class="form-group">
-                                    <label for="admin-manage-role-select">Role</label>
-                                    <select id="admin-manage-role-select" class="input" onchange="syncManagedUserOptionInput('role')">
-                                        <option value="">Select role</option>
-                                    </select>
-                                    <label for="admin-edit-role-name" style="margin-top:10px;">New role name</label>
-                                    <input type="text" id="admin-edit-role-name" class="input" placeholder="Rename selected role">
-                                    <button type="button" class="btn btn-secondary btn-block admin-subaction-btn" onclick="updateUserOptionFromDashboard('role')">Update role</button>
-                                    <button type="button" class="btn btn-danger btn-block admin-subaction-btn" onclick="deleteUserOptionFromDashboard('role')">Delete role</button>
-                                </div>
-                                <div class="form-group">
-                                    <label for="admin-manage-designation-select">Designation</label>
-                                    <select id="admin-manage-designation-select" class="input" onchange="syncManagedUserOptionInput('designation')">
-                                        <option value="">Select designation</option>
-                                    </select>
-                                    <label for="admin-edit-designation-name" style="margin-top:10px;">New designation name</label>
-                                    <input type="text" id="admin-edit-designation-name" class="input" placeholder="Rename selected designation">
-                                    <button type="button" class="btn btn-secondary btn-block admin-subaction-btn" onclick="updateUserOptionFromDashboard('designation')">Update designation</button>
-                                    <button type="button" class="btn btn-danger btn-block admin-subaction-btn" onclick="deleteUserOptionFromDashboard('designation')">Delete designation</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="admin-user-subsection">
-                            <div class="card-head card-head--compact">
                                 <h3>Delete account</h3>
                                 <p>Remove an existing account permanently from the system.</p>
                             </div>
@@ -811,7 +358,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <p class="users-mgmt-hint">Use Edit user to update usernames, roles, and designations.</p>
+                    <p class="users-mgmt-hint">Use Edit role/designation to update user roles and designations.</p>
                 </div>
                 </div>
             </section>
@@ -930,14 +477,6 @@
                                 <option value="start">depends on start</option>
                                 <option value="finish" selected>depends on finish</option>
                             </select>
-                            <label class="dependency-offset-toggle">
-                                <input type="checkbox" id="task-start-dependency-offset-enabled" onchange="toggleDependencyOffsetInput('task', 'start')">
-                                <span>Offset</span>
-                            </label>
-                            <div class="dependency-offset-input-wrap" id="task-start-dependency-offset-wrap" hidden>
-                                <input type="number" id="task-start-dependency-offset-days" class="input" min="0" placeholder="Delay in days">
-                                <small class="form-text">Starts this many days after the dependency event.</small>
-                            </div>
                         </div>
                         <div class="form-group" id="task-finish-dependency-wrap" style="display:none;">
                             <label for="task-finish-dependency-task">Finish dependency task</label>
@@ -948,14 +487,6 @@
                                 <option value="start">depends on start</option>
                                 <option value="finish" selected>depends on finish</option>
                             </select>
-                            <label class="dependency-offset-toggle">
-                                <input type="checkbox" id="task-finish-dependency-offset-enabled" onchange="toggleDependencyOffsetInput('task', 'finish')">
-                                <span>Offset</span>
-                            </label>
-                            <div class="dependency-offset-input-wrap" id="task-finish-dependency-offset-wrap" hidden>
-                                <input type="number" id="task-finish-dependency-offset-days" class="input" min="0" placeholder="Delay in days">
-                                <small class="form-text">Finishes this many days after the dependency event.</small>
-                            </div>
                         </div>
                         <div class="form-group" id="task-assignment-scope-wrap" style="display:none;">
                             <label for="task-assignment-scope">Assignment scope</label>
@@ -1002,7 +533,7 @@
             </section>
 
             <!-- Tasks list -->
-            <section class="content-section" id="tasks" hidden>
+            <section class="content-section" id="tasks">
                 <div class="section-header-row">
                     <div class="section-head">
                         <span class="section-icon" aria-hidden="true">
@@ -1548,14 +1079,6 @@
                         <option value="finish">After dependency finishes</option>
                         <option value="start">After dependency starts</option>
                     </select>
-                    <label class="dependency-offset-toggle">
-                        <input type="checkbox" id="edit-task-start-dependency-offset-enabled" onchange="toggleDependencyOffsetInput('edit-task', 'start')">
-                        <span>Offset</span>
-                    </label>
-                    <div class="dependency-offset-input-wrap" id="edit-task-start-dependency-offset-wrap" hidden>
-                        <input type="number" id="edit-task-start-dependency-offset-days" class="input" min="0" placeholder="Delay in days">
-                        <small class="form-text">Starts this many days after the dependency event.</small>
-                    </div>
                 </div>
                 <div class="form-group" id="edit-task-finish-dependency-wrap" style="display:none;">
                     <label for="edit-task-finish-dependency-task">Finish dependency task</label>
@@ -1566,14 +1089,6 @@
                         <option value="finish">After dependency finishes</option>
                         <option value="start">After dependency starts</option>
                     </select>
-                    <label class="dependency-offset-toggle">
-                        <input type="checkbox" id="edit-task-finish-dependency-offset-enabled" onchange="toggleDependencyOffsetInput('edit-task', 'finish')">
-                        <span>Offset</span>
-                    </label>
-                    <div class="dependency-offset-input-wrap" id="edit-task-finish-dependency-offset-wrap" hidden>
-                        <input type="number" id="edit-task-finish-dependency-offset-days" class="input" min="0" placeholder="Delay in days">
-                        <small class="form-text">Finishes this many days after the dependency event.</small>
-                    </div>
                 </div>
                 <div class="form-group" id="edit-task-type-wrap">
                     <label for="edit-task-type">Task type</label>
@@ -1680,7 +1195,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <div class="modal-title-wrap">
-                    <h2 id="edit-user-modal-title" class="modal-title">Edit user details</h2>
+                    <h2 id="edit-user-modal-title" class="modal-title">Edit role and designation</h2>
                     <p class="modal-subtitle" id="edit-user-modal-subtitle">Update the selected user.</p>
                 </div>
                 <button type="button" class="modal-close" onclick="closeEditUserModal()" aria-label="Close">&times;</button>
@@ -1690,7 +1205,6 @@
                 <div class="form-group">
                     <label for="edit-user-username">Username</label>
                     <input type="text" id="edit-user-username" class="input" placeholder="Enter username">
-                    <small class="form-text">Admins can update the selected user's visible username here.</small>
                 </div>
                 <div class="form-group">
                     <label for="edit-user-role">Role</label>

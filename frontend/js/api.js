@@ -58,7 +58,7 @@ async function apiRequest(endpoint, method, data = null, useAuth = true) {
         localStorage.removeItem("user_id");
         localStorage.removeItem("username");
         localStorage.removeItem("role");
-        if (window.location.pathname.indexOf("dashboard") !== -1) {
+        if (window.location.pathname.indexOf("dashboard") !== -1 || window.location.pathname.indexOf("statistics") !== -1 || window.location.pathname.indexOf("home") !== -1 || window.location.pathname.indexOf("workspace-views") !== -1 || window.location.pathname.indexOf("gantt-view") !== -1 || window.location.pathname.indexOf("my-info") !== -1 || window.location.pathname.indexOf("help") !== -1) {
             window.location.href = "index.html";
         }
         throw new Error(result.detail || "Session expired");
@@ -103,7 +103,7 @@ async function apiRequestFormData(endpoint, method, formData) {
         localStorage.removeItem("user_id");
         localStorage.removeItem("username");
         localStorage.removeItem("role");
-        if (window.location.pathname.indexOf("dashboard") !== -1) {
+        if (window.location.pathname.indexOf("dashboard") !== -1 || window.location.pathname.indexOf("statistics") !== -1 || window.location.pathname.indexOf("home") !== -1 || window.location.pathname.indexOf("workspace-views") !== -1 || window.location.pathname.indexOf("gantt-view") !== -1 || window.location.pathname.indexOf("my-info") !== -1 || window.location.pathname.indexOf("help") !== -1) {
             window.location.href = "index.html";
         }
         throw new Error(result.detail || "Session expired");

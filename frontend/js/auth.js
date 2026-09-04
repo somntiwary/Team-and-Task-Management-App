@@ -10,6 +10,52 @@ function showAuthMsg(text, isError = false) {
     msg.hidden = false;
 }
 
+function formatUserIdDisplay(value) {
+    const n = parseInt(value, 10);
+    if (!n || n < 0) return String(value || "");
+    if (n <= 999) return String(n).padStart(3, "0");
+    return String(n);
+}
+
+function getDefaultLandingPage(roleValue) {
+    return "workspace-views.html";
+}
+
+if (typeof isLoggedIn === "function" && isLoggedIn()) {
+    window.location.href = getDefaultLandingPage();
+}
+
+function loadRegistrationDesignations() {
+    const designationSelect = document.getElementById("reg-designation");
+    if (!designationSelect) return;
+
+    apiRequest("/user-options?option_type=designation", "GET", null, false)
+        .then((items) => {
+            const values = (Array.isArray(items) ? items : [])
+                .filter((item) => item && item.value)
+                .map((item) => String(item.value).trim())
+                .filter((value, index, arr) => value && arr.indexOf(value) === index);
+            if (!values.length) return;
+            const previous = designationSelect.value || "";
+            designationSelect.innerHTML = "";
+            const placeholder = document.createElement("option");
+            placeholder.value = "";
+            placeholder.textContent = "Select designation";
+            designationSelect.appendChild(placeholder);
+            values.forEach((value) => {
+                const option = document.createElement("option");
+                option.value = value;
+                option.textContent = value;
+                if (previous === value) option.selected = true;
+                designationSelect.appendChild(option);
+            });
+            if (previous) designationSelect.value = previous;
+        })
+        .catch(() => {
+            // Keep fallback hardcoded options when catalog load fails.
+        });
+}
+
 function login(event) {
     if (event) event.preventDefault();
     const username = document.getElementById("username").value.trim();
@@ -31,7 +77,8 @@ function login(event) {
                 // Store role in lowercase so header and UI (e.g. multi-assign) work for all roles
                 const role = (res.role || "member").toLowerCase();
                 localStorage.setItem("role", role);
-                window.location.href = "dashboard.html";
+                localStorage.setItem("designation", res.designation || "");
+                window.location.href = getDefaultLandingPage(role);
             } else {
                 showAuthMsg(res.detail || "Login failed", true);
             }
@@ -64,9 +111,14 @@ function signup(event) {
     const username = document.getElementById("reg-username").value.trim();
     const password = document.getElementById("reg-password").value;
     const role = document.getElementById("reg-role").value;
+    const designation = document.getElementById("reg-designation").value;
 
     if (!username || !password) {
         showAuthMsg("Please enter username and password", true);
+        return;
+    }
+    if (!designation) {
+        showAuthMsg("Please select designation", true);
         return;
     }
     if (username.toLowerCase() === password.toLowerCase()) {
@@ -78,10 +130,10 @@ function signup(event) {
 
     // Send role in lowercase so backend stores consistently (Admin -> admin, Member -> member)
     const roleNormalized = (role === "Admin" ? "admin" : "member");
-    apiRequest("/users", "POST", { username, password, role: roleNormalized }, false)
+    apiRequest("/users", "POST", { username, password, role: roleNormalized, designation }, false)
         .then((res) => {
             const id = res && res.id != null ? res.id : "—";
-            showAuthMsg("Account created. Your user ID is " + id + ". Share this ID when someone assigns you a task or adds you to a team. Please sign in.", false);
+            showAuthMsg("Account created. Your user ID is " + formatUserIdDisplay(id) + ". Share this ID when someone assigns you a task or adds you to a team. Please sign in.", false);
             document.getElementById("username").value = username;
             document.getElementById("password").value = "";
             document.getElementById("password").focus();
@@ -155,3 +207,5 @@ function resetPassword(event) {
             showAuthMsg(err.message || "Failed to reset password", true);
         });
 }
+
+loadRegistrationDesignations();

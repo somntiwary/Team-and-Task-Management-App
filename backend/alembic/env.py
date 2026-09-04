@@ -11,7 +11,7 @@ import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/..')
 
 from database import Base
-from models import User, Team, TeamMember, Task, Comment, ActivityLog
+import models  # Import all models so Base.metadata is fully populated
 import config as app_config
 
 # this is the Alembic Config object, which provides
@@ -74,7 +74,7 @@ def run_migrations_online() -> None:
 
     with connectable.connect() as connection:
         context.configure(
-            connection=connection, target_metadata=target_metadata
+            connection=connection, target_metadata=target_metadata, render_as_batch=True
         )
 
         with context.begin_transaction():
